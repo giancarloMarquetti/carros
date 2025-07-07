@@ -3,6 +3,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import render, redirect
 
 def register_view(request):
+
     if request.method == 'POST':
         user_form = UserCreationForm(request.POST)
         if user_form.is_valid():
@@ -10,6 +11,7 @@ def register_view(request):
             return redirect('login')
     else:
         user_form = UserCreationForm()
+        
     return render(
         request,
         'register.html',
