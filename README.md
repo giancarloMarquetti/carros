@@ -41,9 +41,9 @@ Siga estas instruções para configurar e rodar o projeto em sua máquina:
 
 Certifique-se de ter o **Python** (preferencialmente 3.9+) e o **pip** (gerenciador de pacotes do Python) instalados em seu sistema.
 
+```bash
 ### 1. Clonar o Repositório
 
-```bash
 git clone [https://github.com/giancarloMarquetti/catalogo-de-carros.git](https://github.com/giancarloMarquetti/catalogo-de-carros.git) # Ajuste o nome do repositório se for diferente
 cd catalogo-de-carros # Navegue até a pasta raiz do projeto
 
@@ -91,6 +91,7 @@ python manage.py createsuperuser
 ### 7. Iniciar o Servidor de Desenvolvimento
 
 python manage.py runserver
+```
 
 ## ☁️ Configuração para Implantação na AWS
 Este projeto foi configurado com as melhores práticas para facilitar a implantação em serviços da Amazon Web Services (AWS). Embora os detalhes específicos de deploy (como Dockerfiles, arquivos de configuração para Elastic Beanstalk, ECS, etc.) possam variar e não estejam incluídos neste README, a estrutura do projeto e o uso de PostgreSQL como banco de dados (comumente utilizado com AWS RDS) são compatíveis com ambientes de nuvem.
