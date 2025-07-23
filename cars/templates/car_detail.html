@@ -9,7 +9,7 @@
       overflow: hidden;
       text-align: center;
       transition: all 0.3s ease;
-      max-width: 500px;
+      max-width: 600px;
       margin: 20px auto 0;
       margin-bottom: 20px;
     }
@@ -22,7 +22,7 @@
 
     .car-card img {
       width: 100%;
-      height: 200px;
+      height: 400px;
       object-fit: cover;
     }
 
@@ -34,6 +34,20 @@
     .car-card p {
       font-size: 1rem;
       margin-bottom: 10px;
+      text-align: left;
+      margin-left: 20px;
+      margin-right: 20px;
+    }
+
+    .no-photo {
+      width: 100%;
+      height: 400px; /* Use a mesma altura da imagem para consistência */
+      display: flex; /* Para centralizar o texto "Foto não disponível" */
+      align-items: center;
+      justify-content: center;
+      color: #666; /* Cor do texto */
+      font-size: 1.2rem;
+      font-weight: bold;
     }
 
     .buttons-container {
@@ -78,7 +92,22 @@
     a {
       text-decoration: none !important;
     }
+
+    .login-container {
+        padding: 30px;
+        border-radius: 8px;
+        
+        width: 90%; 
+        max-width: 100%; 
+        
+        text-align: center;
+        /* O margin auto nas laterais ainda ajuda a centralizar dentro do Flexbox */
+        margin: 0 auto; /* Removendo o margin-top e margin-bottom fixos */
+        box-sizing: border-box; 
+    }
+
   </style>
+  <div class="login-container">
   <div class="car-card">
       {% if object.photo %}
         <img src="{{ object.photo.url }}" alt="{{ object.model }} - {{ object.brand }}">
@@ -100,4 +129,5 @@
       <a href="{% url 'car_delete' pk=object.pk %}" class="btn btn-danger">Deletar</a>
     </div>
   {% endif %}
+  </div>
 {% endblock %}

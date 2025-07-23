@@ -1,8 +1,182 @@
 {% extends 'base.html' %}
 
 {% block content %}
+<style>
+    /* Remover o display: flex; e centralização do body aqui */
+    /* Deixe o body apenas com estilos básicos para o fundo e fonte */
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f4;
+        margin: 0;
+        padding: 0;
+    }
+
+    /* Estilo para o contêiner principal do conteúdo que você criou no base.html */
+    /* É este contêiner que centralizará o conteúdo do bloco */
+    .main-content-wrapper {
+        min-height: calc(100vh - (altura_do_seu_nav + altura_do_seu_footer)); /* Ajuste isto! */
+        /* Exemplo: min-height: calc(100vh - 120px); se nav for 60px e footer for 60px */
+        display: flex;
+        justify-content: center; /* Centraliza horizontalmente o login-container */
+        align-items: center;     /* Centraliza verticalmente o login-container */
+        padding: 20px 0; /* Adiciona um padding vertical para evitar que o conteúdo cole nas bordas */
+        box-sizing: border-box; /* Garante que padding seja incluído na altura */
+        overflow-y: auto; /* Permite rolagem se o conteúdo for maior que a área disponível */
+    }
+
+    .login-container {
+        background-color: #fff;
+        padding: 30px;
+        border-radius: 8px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        
+        width: 90%; 
+        max-width: 100%; 
+        
+        text-align: center;
+        /* O margin auto nas laterais ainda ajuda a centralizar dentro do Flexbox */
+        margin: 0 auto; /* Removendo o margin-top e margin-bottom fixos */
+        box-sizing: border-box; 
+    }
+
+    .login-container h2 {
+        margin-bottom: 25px;
+        color: #333;
+        font-size: 28px;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+        text-align: left;
+    }
+
+    .form-group label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: bold;
+        color: #555;
+        font-size: 16px;
+    }
+
+    .form-group input[type="text"],
+    .form-group input[type="password"] {
+        width: 100%; 
+        padding: 12px 10px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        font-size: 16px;
+        box-sizing: border-box; 
+        transition: border-color 0.3s ease;
+    }
+
+    .form-group input[type="text"]:focus,
+    .form-group input[type="password"]:focus {
+        outline: none;
+        border-color: #007bff;
+        box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+    }
+
+    .errorlist {
+        list-style: none;
+        padding: 0;
+        margin-top: 5px;
+        color: #dc3545;
+        font-size: 14px;
+        text-align: left;
+    }
+    .errorlist li {
+        margin-bottom: 5px;
+    }
+
+    .login-button {
+        background-color: #007bff;
+        color: #fff;
+        padding: 12px 25px;
+        border: none;
+        border-radius: 5px;
+        font-size: 18px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+        width: 100%;
+        margin-top: 15px;
+    }
+
+    .login-button:hover {
+        background-color: #0056b3;
+    }
+
+    .messages {
+        list-style: none;
+        padding: 10px;
+        margin-bottom: 20px;
+        border-radius: 5px;
+        background-color: #d4edda;
+        color: #155724;
+        border: 1px solid #c3e6cb;
+    }
+
+    @media (max-width: 500px) {
+        .login-container {
+            padding: 20px 15px; 
+            margin: 0 auto; /* Garante que não tenha margens fixas em mobile */
+        }
+        .login-container h2 {
+            font-size: 24px; 
+        }
+        .form-group input[type="text"],
+        .form-group input[type="password"],
+        .login-button {
+            padding: 10px; 
+            font-size: 15px; 
+        }
+    }
+
+</style>
+<div class="login-container">
+    <h2>Cadastre-se</h2>
+
+    {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
 
     <form method="post">
+        {% csrf_token %}
+
+        {% for field in user_form %}
+            <div class="form-group">
+                {{ field.label_tag }}
+                {{ field }}
+                <!-- {% if field.help_text %}
+                    <small class="form-text text-muted">{{ field.help_text }}</small>
+                {% endif %} -->
+                {% if field.errors %}
+                    <ul class="errorlist">
+                        {% for error in field.errors %}
+                            <li>{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
+        {% endfor %}
+
+        {% if user_form.non_field_errors %}
+            <ul class="errorlist">
+                {% for error in user_form.non_field_errors %}
+                    <li>{{ error }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+
+        <input type="submit" value="Cadastrar" class="login-button">
+    </form>
+</div>
+{% endblock %}
+
+    <!-- <form method="post">
         {% csrf_token %}
 
         <div class="form-group">
@@ -27,6 +201,4 @@
             <input type="submit" value="Cadastrar">
         </div>
         
-    </form>
-
-{% endblock %}
+    </form> -->

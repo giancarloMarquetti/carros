@@ -1,65 +1,148 @@
-{% extends "base.html" %}
+{% extends 'base.html' %}
 
 {% block content %}
-
-  <style>
-    form {
-      max-width: 800px;
-      margin: 0 auto;
-      padding: 20px;
-      background-color: #f5f5f5;
-      border-radius: 10px;
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+<style>
+    /* Remover o display: flex; e centralização do body aqui */
+    /* Deixe o body apenas com estilos básicos para o fundo e fonte */
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f4;
+        margin: 0;
+        padding: 0;
     }
 
-    form h1 {
-      font-size: 2rem;
-      margin-bottom: 20px;
-      text-align: center;
+    /* Estilo para o contêiner principal do conteúdo que você criou no base.html */
+    /* É este contêiner que centralizará o conteúdo do bloco */
+    .main-content-wrapper {
+        min-height: calc(100vh - (altura_do_seu_nav + altura_do_seu_footer)); /* Ajuste isto! */
+        /* Exemplo: min-height: calc(100vh - 120px); se nav for 60px e footer for 60px */
+        display: flex;
+        justify-content: center; /* Centraliza horizontalmente o login-container */
+        align-items: center;     /* Centraliza verticalmente o login-container */
+        padding: 20px 0; /* Adiciona um padding vertical para evitar que o conteúdo cole nas bordas */
+        box-sizing: border-box; /* Garante que padding seja incluído na altura */
+        overflow-y: auto; /* Permite rolagem se o conteúdo for maior que a área disponível */
     }
 
-    table {
-      margin: 0 auto;
-      border-collapse: collapse;
-      width: 100%;
-      max-width: 600px;
+    .login-container {
+        background-color: #fff;
+        padding: 30px;
+        border-radius: 8px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        
+        width: 90%; 
+        max-width: 100%; 
+        
+        text-align: center;
+        /* O margin auto nas laterais ainda ajuda a centralizar dentro do Flexbox */
+        margin: 0 auto; /* Removendo o margin-top e margin-bottom fixos */
+        box-sizing: border-box; 
     }
 
-    th, td {
-      padding: 4px;
-      text-align: left;
-      border-bottom: 1px solid #ddd;
+    .login-container h2 {
+        margin-bottom: 25px;
+        color: #333;
+        font-size: 28px;
     }
 
-    th {
-      background-color: #f2f2f2;
+    .form-group {
+        margin-bottom: 20px;
+        text-align: left;
     }
 
-    input[type="text"], input[type="number"], select, textarea {
-      padding: 8px;
-      font-size: 14px;
-      border: 2px solid #ddd;
-      border-radius: 4px;
-      width: 100%;
-      max-width: 300px;
-      margin-bottom: 8px;
-      transition: border-bottom-color 0.3s ease-in-out;
+    .form-group label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: bold;
+        color: #555;
+        font-size: 16px;
     }
 
-    input[type="text"]:focus, input[type="number"]:focus, select:focus, textarea:focus {
-      outline: none;
-      border-bottom-color: #0096c7;
+    .form-group input[type="text"],
+.form-group input[type="password"],
+.form-group input[type="number"], /* <-- Adicionado */
+.form-group select { /* <-- Adicionado */
+    width: 100%;
+    padding: 12px 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 16px;
+    box-sizing: border-box;
+    transition: border-color 0.3s ease;
+}
+
+/* Opcional: Estilo para quando o campo está focado */
+.form-group input:focus,
+.form-group select:focus {
+    border-color: #0096c7; /* Cor da borda ao focar, combine com seu tema */
+    outline: none; /* Remove o contorno padrão do navegador */
+}
+
+/* Opcional: Estilo específico para textareas, se você tiver */
+.form-group textarea {
+    width: 100%;
+    padding: 12px 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 16px;
+    box-sizing: border-box;
+    transition: border-color 0.3s ease;
+    resize: vertical; /* Permite redimensionamento vertical */
+}
+
+    .errorlist {
+        list-style: none;
+        padding: 0;
+        margin-top: 5px;
+        color: #dc3545;
+        font-size: 14px;
+        text-align: left;
+    }
+    .errorlist li {
+        margin-bottom: 5px;
     }
 
-    .btn {
-      background-color: #0096c7;
-      color: #fff;
-      border: none;
-      padding: 10px 20px;
-      font-size: 16px;
-      border-radius: 4px;
-      cursor: pointer;
-      transition: background-color 0.3s ease-in-out;
+    .login-button {
+        background-color: #007bff;
+        color: #fff;
+        padding: 12px 25px;
+        border: none;
+        border-radius: 5px;
+        font-size: 18px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+        width: 100%;
+        margin-top: 15px;
+    }
+
+    .login-button:hover {
+        background-color: #0056b3;
+    }
+
+    .messages {
+        list-style: none;
+        padding: 10px;
+        margin-bottom: 20px;
+        border-radius: 5px;
+        background-color: #d4edda;
+        color: #155724;
+        border: 1px solid #c3e6cb;
+    }
+
+    @media (max-width: 500px) {
+        .login-container {
+            padding: 20px 15px; 
+            margin: 0 auto; /* Garante que não tenha margens fixas em mobile */
+        }
+        .login-container h2 {
+            font-size: 24px; 
+        }
+        .form-group input[type="text"],
+        .form-group input[type="password"],
+        .login-button {
+            padding: 10px; 
+            font-size: 15px; 
+        }
     }
 
     .buttons-container {
@@ -101,12 +184,73 @@
       margin-top: 5px;
     }
 
-    a {
-      text-decoration: none !important;
+    /* --- Media Query para Responsividade dos Botões --- */
+    @media (max-width: 600px) { /* Você pode ajustar o breakpoint (600px) */
+        .buttons-container {
+            flex-direction: column; /* Empilha os botões verticalmente */
+            align-items: center; /* Centraliza os botões na coluna */
+            padding: 0 20px; /* Adiciona padding para não colar nas bordas da tela */
+        }
+
+        .btn {
+            width: 100%; /* Faz com que cada botão ocupe a largura total */
+            margin: 10px 0; /* Adiciona margem vertical entre os botões e remove a horizontal */
+        }
     }
 
-  </style>
-  <form method="post" enctype="multipart/form-data">
+</style>
+<div class="login-container">
+    <h2>Login</h2>
+
+    {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+    <form method="post"  enctype="multipart/form-data">
+        {% csrf_token %}
+
+        {% for field in form %}
+            <div class="form-group">
+                {{ field.label_tag }}
+                {{ field }}
+                {% if field.help_text %}
+                    <small class="form-text text-muted">{{ field.help_text }}</small>
+                {% endif %}
+                {% if field.errors %}
+                    <ul class="errorlist">
+                        {% for error in field.errors %}
+                            <li>{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
+        {% endfor %}
+
+        {% if login_form.non_field_errors %}
+            <ul class="errorlist">
+                {% for error in login_form.non_field_errors %}
+                    <li>{{ error }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+
+        <div>
+          <div class="buttons-container">
+            <input type="submit" value="Salvar Alterações" class="btn btn-primary">
+            <a href="{% url 'car_delete' pk=object.pk %}" class="btn btn-danger">Deletar Carro</a>
+            <a href="{% url 'cars_list' %}" class="btn btn-secondary">Cancelar</a>
+          </div>
+        </div>
+    </form>
+</div>
+{% endblock %}
+
+
+  <!-- <form method="post" enctype="multipart/form-data">
     {% csrf_token %}
     <h1>Editar Carro</h1>
     <table>
@@ -119,5 +263,4 @@
         <a href="{% url 'cars_list' %}" class="btn btn-secondary">Cancelar</a>
       </div>
     </div>
-  </form>
-{% endblock %}
+  </form> -->

@@ -1,100 +1,374 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-br">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>{% block title %}{% endblock %}</title>
-  <style>
-    body {
-        font-family: 'Open Sans', sans-serif;
-        background-color: #f7f7f7;
-        color: #333;
-        margin: 0;
-        padding: 0;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Novidade Multimarcas</title>
+    <style>
+        /* CSS do Body - Mantenha como está, sem flexbox aqui */
+        body {
+            font-family: 'Open Sans', sans-serif; /* Seu font-family */
+            background-color: #f7f7f7; /* Seu background-color */
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
 
-    header {
-        background-color: #0096c7;
-        color: #fff;
-        text-align: center;
-    }
+        /* NOVO: Contêiner principal para o layout da página */
+        #page-container {
+            display: flex; /* Transforma em contêiner flex */
+            flex-direction: column; /* Empilha os filhos (header, main-content-wrapper, footer) em coluna */
+            min-height: 100vh; /* Ocupa no mínimo 100% da altura da viewport */
+            width: 100%; /* Garante que ocupe a largura total */
+        }
 
-    footer {
-        background-color: #ccc;
-        color: #333;
-        padding: 20px;
-        text-align: center;
-    }
+        header {
+            background-color: #0096c7;
+            color: #fff;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap; 
+        }
 
-    nav {
-        background-color: #0096c7;
-        color: #fff;
-        height: 50px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
+        header h1 {
+            margin: 0;
+            font-size: 28px;
+        }
 
-    nav ul {
-        list-style: none;
-        margin: 0;
-        padding: 0;
-        display: flex;
-    }
+        nav {
+            display: flex; 
+            align-items: center;
+        }
 
-    nav ul li {
-        margin: 0 10px;
-    }
+        nav ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+        }
 
-    nav ul li a {
-        color: #fff;
-        text-decoration: none;
-        font-size: 16px;
-        padding: 15px;
-        transition: all 0.3s ease;
-    }
+        nav ul li a {
+            color: #fff;
+            text-decoration: none;
+            padding: 10px 15px;
+            display: block;
+            transition: background-color 0.3s ease;
+            border-radius: 5px;
+        }
 
-    nav ul li a:hover {
-        background-color: #32bbe8;
-    }
+        nav ul li b {
+            color: #fff;
+            text-decoration: underline;
+            padding: 10px 15px;
+            display: block;
+            transition: background-color 0.3s ease;
+            border-radius: 5px;
+        }
 
-    nav ul li.active a {
-        background-color: #666;
-    }
+        nav ul li a:hover {
+            background-color: #007bb0;
+        }
 
-    nav ul li.active a:hover {
-        background-color: #999;
-    }
+        .nav-left {
+            margin-right: auto; 
+        }
 
-  </style>
+        .nav-right li {
+            margin-left: 15px;
+        }
+        
+        .nav-right li:first-child {
+            color: #d8d8d8; 
+            padding: 10px 0; 
+        }
+
+        /* --- Estilos do Hambúrguer (desktop hidden) --- */
+        .hamburger-menu {
+            display: none; 
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 5px;
+            z-index: 1000; 
+        }
+
+        .hamburger-menu .bar {
+            display: block;
+            width: 25px;
+            height: 3px;
+            background-color: #fff;
+            margin: 5px 0;
+            transition: 0.4s;
+            border-radius: 2px;
+        }
+
+        /* Animação do Hambúrguer */
+        .hamburger-menu.open .bar:nth-child(1) {
+            transform: translateY(8px) rotate(-45deg);
+        }
+
+        .hamburger-menu.open .bar:nth-child(2) {
+            opacity: 0;
+        }
+
+        .hamburger-menu.open .bar:nth-child(3) {
+            transform: translateY(-8px) rotate(45deg);
+        }
+
+        /* --- Estilo do Menu Mobile (escondido por padrão) --- */
+        .mobile-menu {
+            display: none; 
+            flex-direction: column;
+            width: 100%;
+            background-color: #007bb0; 
+            position: absolute; 
+            top: 70px; /* AJUSTE para a altura do seu header */
+            left: 0;
+            padding: 10px 0;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            z-index: 999;
+        }
+
+        .mobile-menu.active {
+            display: flex; 
+        }
+
+        .mobile-menu li {
+            width: 100%;
+            text-align: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1); 
+        }
+
+        .mobile-menu li:last-child {
+            border-bottom: none;
+        }
+
+        .mobile-menu li a {
+            padding: 15px 20px;
+            color: #fff;
+            display: block;
+        }
+        .mobile-menu li a:hover {
+            background-color: #0056b3;
+        }
+
+        /* --- Contêiner Principal do Conteúdo --- */
+        /* Este vai crescer e empurrar o footer */
+        .main-content-wrapper {
+            flex-grow: 1; /* Permite que este contêiner ocupe todo o espaço restante */
+            
+            /* Estilos para centralizar o conteúdo do bloco, como o formulário de login */
+            display: flex;
+            justify-content: center; /* Centraliza horizontalmente */
+            align-items: center;     /* Centraliza verticalmente */
+            
+            padding: 20px 0; 
+            box-sizing: border-box; 
+            overflow-y: auto; /* Permite rolagem se o conteúdo for maior que a área disponível */
+        }
+
+        footer {
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            padding: 15px 20px;
+            width: 100%; 
+            box-sizing: border-box; 
+            /* AQUI: O margin-top: auto agora funciona porque #page-container é um flex container de coluna */
+            margin-top: auto; 
+        }
+
+        /* --- Media Queries para Responsividade --- */
+        @media (max-width: 768px) { 
+            nav ul {
+                display: none; 
+            }
+
+            .hamburger-menu {
+                display: block; 
+            }
+            
+            #page-container {
+                overflow-y: auto; /* Permite rolagem do contêiner principal em mobile, se necessário */
+            }
+        }
+        
+        /* Estilos do login-container e outros mantidos do seu código anterior */
+        .login-container {
+            padding: 30px;
+            
+            width: 90%; 
+            max-width: 400px; 
+            
+            text-align: center;
+            margin: 0 auto; 
+            box-sizing: border-box; 
+        }
+
+        .login-container h2 {
+            margin-bottom: 25px;
+            color: #333;
+            font-size: 28px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #555;
+            font-size: 16px;
+        }
+
+        .form-group input[type="text"],
+        .form-group input[type="password"] {
+            width: 100%; 
+            padding: 12px 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+            box-sizing: border-box; 
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input[type="text"]:focus,
+        .form-group input[type="password"]:focus {
+            outline: none;
+            border-color: #007bff;
+            box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+        }
+
+        .errorlist {
+            list-style: none;
+            padding: 0;
+            margin-top: 5px;
+            color: #dc3545;
+            font-size: 14px;
+            text-align: left;
+        }
+        .errorlist li {
+            margin-bottom: 5px;
+        }
+
+        .login-button {
+            background-color: #007bff;
+            color: #fff;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 5px;
+            font-size: 18px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            width: 100%;
+            margin-top: 15px;
+        }
+
+        .login-button:hover {
+            background-color: #0056b3;
+        }
+
+        .messages {
+            list-style: none;
+            padding: 10px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        @media (max-width: 500px) {
+            .login-container {
+                padding: 20px 15px; 
+                margin: 0 auto; 
+            }
+            .login-container h2 {
+                font-size: 24px; 
+            }
+            .form-group input[type="text"],
+            .form-group input[type="password"],
+            .login-button {
+                padding: 10px; 
+                font-size: 15px; 
+            }
+        }
+    </style>
 </head>
 <body>
-  <header>
-    <nav>
-      <ul>
-        {% if user.is_authenticated %}
-          <li>Olá, {{ user.username }}</li>
-          <li><a href="{% url 'new_car' %}">Cadastrar Carros</a></li>
-        {% endif %}
-        {% if not user.is_authenticated %}
-          <li><a href="{% url 'register' %}">Cadastre-se</a></li>
-          <li><a href="{% url 'login' %}">Login</a></li>
-        {% endif %}
-        <li><a href="{% url 'cars_list' %}">Carros</a></li>
-        {% if user.is_authenticated %}
-          <li><a href="{% url 'logout' %}">Sair</a></li>
-        {% endif %}
-      </ul>
-    </nav>
-  </header>
+    {# NOVO: Contêiner que será o Flexbox principal #}
+    <div id="page-container"> 
+        <header>
+            <h1>Novidade Multimarcas</h1>
+            <nav>
+                <button class="hamburger-menu" aria-label="Abrir Menu">
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                </button>
 
-  <main>
-    {% block content %}
-    {% endblock %}
-  </main>
+                <ul class="nav-left">
+                    {% if user.is_authenticated %}
+                        <li><b>Olá, {{ user.username }}</b></li>
+                    {% endif %}
+                    <li><a href="{% url 'cars_list' %}">Carros</a></li>
+                    {% if user.is_authenticated %}
+                        <li><a href="{% url 'new_car' %}">Cadastrar Carros</a></li>
+                    {% endif %}
+                    {% if user.is_authenticated %}
+                        <li><a href="{% url 'logout' %}">Sair</a></li>
+                    {% else %}
+                        <li><a href="{% url 'register' %}">Cadastre-se</a></li>
+                        <li><a href="{% url 'login' %}">Login</a></li>
+                    {% endif %}
+                </ul>
+            </nav>
+        </header>
 
-  <footer>
-    <p>&copy; 2025 Giancarlo Multimarcas</p>
-  </footer>
+        <ul class="mobile-menu">
+            <li><a href="{% url 'cars_list' %}">Carros</a></li>
+            {% if user.is_authenticated %}
+                <li><a href="{% url 'new_car' %}">Cadastrar Carros</a></li>
+                <li>Olá, {{ user.username }}</li>
+                <li><a href="{% url 'logout' %}">Sair</a></li>
+            {% else %}
+                <li><a href="{% url 'register' %}">Cadastre-se</a></li>
+                <li><a href="{% url 'login' %}">Login</a></li>
+            {% endif %}
+        </ul>
+
+        <div class="main-content-wrapper">
+            {% block content %}
+            {% endblock %}
+        </div>
+
+        <footer>
+            <p>&copy; 2025 Novidade Multimarcas</p>
+        </footer>
+    </div> {# FIM do #page-container #}
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const hamburgerMenu = document.querySelector('.hamburger-menu');
+            const mobileMenu = document.querySelector('.mobile-menu');
+
+            hamburgerMenu.addEventListener('click', function() {
+                hamburgerMenu.classList.toggle('open');
+                mobileMenu.classList.toggle('active');
+            });
+
+            mobileMenu.querySelectorAll('a').forEach(link => {
+                link.addEventListener('click', () => {
+                    hamburgerMenu.classList.remove('open');
+                    mobileMenu.classList.remove('active');
+                });
+            });
+        });
+    </script>
 </body>
 </html>
