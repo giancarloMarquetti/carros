@@ -49,7 +49,6 @@ cd catalogo-de-carros # Navegue até a pasta raiz do projeto
 
 ### 2. Criar e Ativar o Ambiente Virtua
 
-```bash
 python -m venv venv
 # No Windows:
 .\venv\Scripts\activate
@@ -58,7 +57,6 @@ source venv/bin/activate
 
 ### 3. Instalar as Dependências
 
-```bash
 pip install -r requirements.txt
 
 ### 4. Configurar Variáveis de Ambiente
@@ -84,17 +82,14 @@ api_key = "SUA_API_KEY_DA_OPENAI_AQUI" # <-- Insira sua chave aqui
 
 ### 5. Aplicar Migrações do Banco de Dados
 
-```bash
 python manage.py migrate
 
 ### 6. Criar um Superusuário (Opcional)
 
-```bash
 python manage.py createsuperuser
 
 ### 7. Iniciar o Servidor de Desenvolvimento
 
-```bash
 python manage.py runserver
 
 ## ☁️ Configuração para Implantação na AWS
